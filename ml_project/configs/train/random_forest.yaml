@@ -1,0 +1,46 @@
+# @package _group_
+defaults:
+  - common
+
+data_params:
+  data_path: '../../data/raw/heart.csv'
+  model_path: '../../models/model.pkl'
+  metric_path: '../../models/metrics.json'
+  params_path: '../../models/params.json'
+  splitting_params:
+    val_size: 0.25
+    random_state: 9
+train_params:
+  model_type: 'sklearn.ensemble.RandomForestClassifier'
+  model_fixed_params:
+    n_jobs: 6
+    random_state: 9
+  model_tune_params:
+    n_estimators: [50, 100, 150]
+    criterion: ['gini', 'entropy']
+    max_depth: [5, 10, 15, 20]
+feature_params:
+  num_missing: 'mean'
+  cat_missing: 'most_frequent'
+  transform_params:
+    quantile: 0.1
+    feats:
+      - 'trestbps'
+      - 'chol'
+      - 'oldpeak'
+  categorical_feats:
+    - 'sex'
+    - 'cp'
+    - 'fbs'
+    - 'restecg'
+    - 'exang'
+    - 'slope'
+    - 'thal'
+  numerical_feats:
+    - 'age'
+    - 'trestbps'
+    - 'chol'
+    - 'thalach'
+    - 'oldpeak'
+    - 'ca'
+  target_col: 'target'

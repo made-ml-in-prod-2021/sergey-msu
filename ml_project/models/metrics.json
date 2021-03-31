@@ -1,0 +1,1 @@
+{"train_scores": {"accuracy": 0.6528, "roc_auc": 0.6412, "f1": 0.7287, "precision": 0.6164, "recall": 0.8911}, "valid_scores": {"accuracy": 0.7059, "roc_auc": 0.6587, "f1": 0.7826, "precision": 0.7297, "recall": 0.8438}}

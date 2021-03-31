@@ -1,0 +1,10 @@
+# @package _group_
+name: 'ml_project_train_hw1'
+experiment: 'train_heart_disease_2021-04-22_rf'
+logging:
+  path: '../../../../out/logs/{experiment}/ml_project_train.log'
+  format: '%(asctime)s %(levelname)s %(message)s'
+  date_format: '%Y-%m-%d %H:%M:%S'
+  level: 20  # INFO
+  mode: 'a'
+  stdout: False

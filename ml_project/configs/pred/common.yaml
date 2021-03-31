@@ -1,0 +1,21 @@
+# @package _group_
+data_params:
+  data_path: '../../data/raw/heart.csv'
+  model_path: '../../models/model.pkl'
+  preds_path: '../../../../out/preds/preds.csv'
+feature_params:
+  categorical_feats:
+    - 'sex'
+    - 'cp'
+    - 'fbs'
+    - 'restecg'
+    - 'exang'
+    - 'slope'
+    - 'thal'
+  numerical_feats:
+    - 'age'
+    - 'trestbps'
+    - 'chol'
+    - 'thalach'
+    - 'oldpeak'
+    - 'ca'

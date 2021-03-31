@@ -1,0 +1,9 @@
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+  job_logging: null
+
+name: 'etl_report'
+data_path: '../data/raw/heart.csv'
+save_path: '../src/visualization/report.txt'
