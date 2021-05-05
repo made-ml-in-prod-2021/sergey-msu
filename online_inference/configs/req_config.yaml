@@ -1,0 +1,10 @@
+host: '0.0.0.0'
+port: 8000
+test_data_path: '../data/heart_test.csv'
+logging:
+  path: '../../../out/logs/inference/test_requests.log'
+  format: '%(asctime)s %(levelname)s %(message)s'
+  date_format: '%Y-%m-%d %H:%M:%S'
+  level: 20  # INFO
+  mode: 'a'
+  stdout: True
