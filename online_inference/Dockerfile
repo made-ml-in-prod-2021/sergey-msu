@@ -1,15 +1,6 @@
 FROM python:3.8-slim
 COPY requirements.txt ./requirements.txt
-#RUN CFLAG="-Os -g0 -Wl,--strip-all" pip install -r requirements.txt
-
-RUN CFLAGS="-Os -I/usr/include:/usr/local/include -L/usr/lib:/usr/local/lib" \
-    /usr/local/bin/pip install \
-    --no-cache-dir \
-    --compile \
-    --global-option=build_ext \
-    --global-option="-j 4" \
-    -r requirements.txt
-
+RUN pip install -r requirements.txt
 
 ARG NAME=online_inference
 ARG APP_HOME=/opt/$NAME
@@ -25,4 +16,4 @@ WORKDIR $APP_HOME/src
 
 ENV PYTHONPATH "${PYTHONPATH}:.."
 
-CMD ["python", "src/app.py"]
+CMD ["python", "app.py"]

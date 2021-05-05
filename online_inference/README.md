@@ -1,2 +1,30 @@
-docker build -t spmathf/online_inference:v1 .
-docker run -p 8000:8000 spmathf/online_inference:v1
+## Проект online_inference
+
+Сборка образа:
+~~~
+docker build -t sergeymsu1984/online_inference:v1 .
+~~~
+
+Запуск образа:
+~~~
+docker run -p 8000:8000 sergeymsu1984/online_inference:v1
+~~~
+
+Пуш в хаб:
+~~~
+docker push sergeymsu1984/online_inference:v1
+~~~
+
+Пулл из хаба:
+~~~
+docker pull sergeymsu1984/online_inference:v1
+~~~
+
+Особенности решения:
+- Вместо переменных окружения решил использовать конфиги.
+- Приложение и тестовый скрипт полностью конфигурируемы из файлов
+- Постарался соблюсти модульную и ООП структуру без висящих глобальных переменных (кроме самых важных) и т.п.
+
+Минимизация размера докер образа:
+- Использовал slim версию питона:  python:3.8-slim (1.38G -> 607M)
+- Понизил версию библиотеки: scikit-learn==0.23.2 (607M -> 100M)
