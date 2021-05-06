@@ -2,22 +2,22 @@
 
 Сборка образа:
 ~~~
-docker build -t sergeymsu1984/online_inference:v1 .
+docker build -t sergeymsu1984/online_inference:v2 .
 ~~~
 
 Запуск образа:
 ~~~
-docker run -p 8000:8000 sergeymsu1984/online_inference:v1
+docker run -p 8000:8000 sergeymsu1984/online_inference:v2
 ~~~
 
 Пуш в хаб:
 ~~~
-docker push sergeymsu1984/online_inference:v1
+docker push sergeymsu1984/online_inference:v2
 ~~~
 
 Пулл из хаба:
 ~~~
-docker pull sergeymsu1984/online_inference:v1
+docker pull sergeymsu1984/online_inference:v2
 ~~~
 
 Особенности решения:
