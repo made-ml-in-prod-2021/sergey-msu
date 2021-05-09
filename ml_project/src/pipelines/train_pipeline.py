@@ -152,7 +152,7 @@ def train_model(logger: Logger, params: TrainingParams,
 
     """
     logger.info(f'begin training model {params.model_type}')
-    trainer = ModelTrainer(params)
+    trainer = ModelTrainer(params, logger)
     trainer.fit(train_ft, valid_ft)
 
     logger.info('training finished')
@@ -204,7 +204,8 @@ def prepare_feature_transformer(logger: Logger,
 
     """
     logger.info(f'build transformer with params {params}')
-    builder = FeatureBuilder(data.columns.values, params, mode='train')
+    builder = FeatureBuilder(data.columns.values, params, mode='train',
+                             logger=logger)
     return builder.transformer
 
 

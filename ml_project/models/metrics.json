@@ -1,1 +1,1 @@
-{"train_scores": {"accuracy": 0.6528, "roc_auc": 0.6412, "f1": 0.7287, "precision": 0.6164, "recall": 0.8911}, "valid_scores": {"accuracy": 0.7059, "roc_auc": 0.6587, "f1": 0.7826, "precision": 0.7297, "recall": 0.8438}}
+{"train_scores": {"accuracy": 0.9714, "roc_auc": 0.973, "f1": 0.975, "precision": 0.9873, "recall": 0.963}, "valid_scores": {"accuracy": 0.9574, "roc_auc": 0.9412, "f1": 0.9677, "precision": 0.9375, "recall": 1.0}}

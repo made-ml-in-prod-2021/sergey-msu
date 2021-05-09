@@ -116,7 +116,8 @@ def prepare_feature_transformer(logger: Logger,
 
     """
     logger.info(f'build transformer with params {params}')
-    builder = FeatureBuilder(data.columns.values, params, mode='predict')
+    builder = FeatureBuilder(data.columns.values, params, mode='predict',
+                             logger=logger)
     return builder.transformer
 
 

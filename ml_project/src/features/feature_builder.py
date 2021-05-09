@@ -1,4 +1,5 @@
 import numpy as np
+from logging import Logger
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
@@ -12,6 +13,7 @@ from .nope_transformer import NopeTransformer
 class FeatureBuilder:
     """ Class that incapsulates feature building logic. """
     def __init__(self, all_features: list, params: FeatureParams,
+                 logger: Logger,
                  mode: str = 'train'):
         """
         Init class instance.
@@ -22,6 +24,8 @@ class FeatureBuilder:
             List of features under interest.
         params: FeatureParams
             Feature pipeline parameters.
+        logger: Logger
+            App Logger.
         mode: str
             Feature pipeline mode (i.e. 'train' or anything else treating as
             test mode).
@@ -30,7 +34,11 @@ class FeatureBuilder:
         self.mode = mode
         self.all_features = all_features
         self.params = params
+        self.logger = logger
+
+        self.logger.info('  > build feature transformer')
         self.transformer = self.build(params)
+        self.logger.info('  > build feature transformer: done')
 
     def build(self, params: FeatureParams) -> Pipeline:
         """
@@ -87,16 +95,20 @@ class FeatureBuilder:
             Feature pipeline parameters.
 
         """
+        self.logger.info('    > build filter')
         if self.mode == 'train':
             params = params.transform_params
-            return Pipeline(
+            result = Pipeline(
                 [
                     ('quantile', OutlierTransformer(cols=params.feats,
                                                     quantile=params.quantile))
                 ]
             )
         else:
-            return Pipeline([('nope', NopeTransformer())])
+            result = Pipeline([('nope', NopeTransformer())])
+
+        self.logger.info('    > build filter: done')
+        return result
 
     def build_categorical(self, params: FeatureParams) -> Pipeline:
         """
@@ -108,8 +120,9 @@ class FeatureBuilder:
             Feature pipeline parameters.
 
         """
+        self.logger.info('    > build categorical')
         if self.mode == 'train':
-            return Pipeline(
+            result = Pipeline(
                 [
                     ('impute', SimpleImputer(missing_values=np.nan,
                                              strategy=params.cat_missing)),
@@ -117,7 +130,10 @@ class FeatureBuilder:
                 ]
             )
         else:
-            return Pipeline([('ohe', OneHotEncoder())])
+            result = Pipeline([('ohe', OneHotEncoder())])
+
+        self.logger.info('    > build categorical:done')
+        return result
 
     def build_numerical(self, params: FeatureParams) -> Pipeline:
         """
@@ -129,12 +145,15 @@ class FeatureBuilder:
             Feature pipeline parameters.
 
         """
+        self.logger.info('    > build numerical')
         if self.mode == 'train':
-            return Pipeline(
+            result = Pipeline(
                 [
                     ('impute', SimpleImputer(missing_values=np.nan,
                                              strategy=params.num_missing))
                 ]
             )
         else:
-            return Pipeline([('nope', NopeTransformer())])
+            result = Pipeline([('nope', NopeTransformer())])
+        self.logger.info('    > build numerical: done')
+        return result

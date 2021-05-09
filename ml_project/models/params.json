@@ -1,1 +1,1 @@
-{"random_state": 9, "tol": 0.001, "C": 1}
+{"n_jobs": 6, "random_state": 9, "criterion": "gini", "max_depth": 5, "n_estimators": 50}
