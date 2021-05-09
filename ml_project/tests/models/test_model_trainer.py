@@ -1,11 +1,18 @@
 import pytest
 import pandas as pd
+from logging import Logger
 from sklearn.ensemble import RandomForestClassifier
 
 from src.models.model_trainer import ModelTrainer
 from src.entities.train_params import TrainingParams
 from src.features.feature_builder import FeatureBuilder, FeatureParams
 from tests.data_generator import generate_test_dataframe
+from tests.mocks import NopeLogger
+
+
+@pytest.fixture()
+def nope_logger() -> Logger:
+    return NopeLogger('nope')
 
 
 @pytest.fixture()
@@ -17,11 +24,13 @@ def feature_params() -> FeatureParams:
 
 
 @pytest.fixture()
-def train_feature_builder(feature_params) -> FeatureBuilder:
+def train_feature_builder(nope_logger: Logger, feature_params: FeatureParams) \
+        -> FeatureBuilder:
     all_features = \
         ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg',
          'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal', 'target']
-    return FeatureBuilder(all_features, feature_params, 'train')
+    return FeatureBuilder(all_features, feature_params,
+                          nope_logger, 'train')
 
 
 @pytest.fixture()
@@ -46,12 +55,14 @@ def training_params() -> TrainingParams:
 
 
 @pytest.fixture()
-def simple_trainer(training_params: TrainingParams) -> ModelTrainer:
-    return ModelTrainer(training_params)
+def simple_trainer(nope_logger: Logger, training_params: TrainingParams) -> \
+        ModelTrainer:
+    return ModelTrainer(training_params, nope_logger)
 
 
-def test_model_trainer_init(training_params: TrainingParams):
-    trainer = ModelTrainer(training_params)
+def test_model_trainer_init(nope_logger: Logger,
+                            training_params: TrainingParams):
+    trainer = ModelTrainer(training_params, nope_logger)
 
     assert trainer.fixed_params == {'random_state': 9}
     assert trainer.params == training_params

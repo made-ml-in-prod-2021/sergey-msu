@@ -1,9 +1,16 @@
 import pytest
+from logging import Logger
 import numpy as np
 import pandas as pd
 
 from src.features.feature_builder import FeatureBuilder, FeatureParams
 from tests.data_generator import generate_test_dataframe
+from tests.mocks import NopeLogger
+
+
+@pytest.fixture()
+def nope_logger() -> Logger:
+    return NopeLogger('nope')
 
 
 @pytest.fixture()
@@ -49,13 +56,15 @@ def feature_params(cat_features, num_features) -> FeatureParams:
 
 
 @pytest.fixture()
-def train_feature_builder(all_features, feature_params) -> FeatureBuilder:
-    return FeatureBuilder(all_features, feature_params, 'train')
+def train_feature_builder(nope_logger, all_features, feature_params) -> \
+        FeatureBuilder:
+    return FeatureBuilder(all_features, feature_params, nope_logger, 'train')
 
 
-def test_feature_builder_init(all_features: list,
+def test_feature_builder_init(nope_logger, all_features: list,
                               feature_params: FeatureParams):
-    builder = FeatureBuilder(all_features, feature_params, 'some_mode')
+    builder = FeatureBuilder(all_features, feature_params, nope_logger,
+                             'some_mode')
     assert builder.all_features == all_features
     assert builder.params == feature_params
     assert builder.transformer is not None

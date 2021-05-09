@@ -31,8 +31,9 @@ def nope_logger() -> Logger:
 
 
 @pytest.fixture()
-def simple_trainer(training_params: TrainingParams) -> ModelTrainer:
-    return ModelTrainer(training_params)
+def simple_trainer(nope_logger: Logger, training_params: TrainingParams) -> \
+        ModelTrainer:
+    return ModelTrainer(training_params, nope_logger)
 
 
 @pytest.fixture()
@@ -68,13 +69,15 @@ def feature_params(cat_features, num_features) -> FeatureParams:
 
 
 @pytest.fixture()
-def train_feature_builder(all_features, feature_params) -> FeatureBuilder:
-    return FeatureBuilder(all_features, feature_params, 'train')
+def train_feature_builder(nope_logger, all_features, feature_params) -> \
+        FeatureBuilder:
+    return FeatureBuilder(all_features, feature_params, nope_logger, 'train')
 
 
 @pytest.fixture()
-def test_feature_builder(all_features, feature_params) -> FeatureBuilder:
-    return FeatureBuilder(all_features, feature_params, 'test')
+def test_feature_builder(nope_logger, all_features, feature_params) -> \
+        FeatureBuilder:
+    return FeatureBuilder(all_features, feature_params, nope_logger, 'test')
 
 
 @pytest.fixture()
