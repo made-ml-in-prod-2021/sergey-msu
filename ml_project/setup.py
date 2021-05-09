@@ -10,7 +10,7 @@ setup(
         "click==7.1.2",
         "python-dotenv>=0.5.1",
         "scikit-learn==0.24.1",
-        "dataclasses==0.8",
+        "dataclasses",
         "pyyaml==3.11",
         "marshmallow-dataclass==8.3.0",
         "pandas==1.1.5",
