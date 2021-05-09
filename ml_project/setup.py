@@ -14,6 +14,7 @@ setup(
         "pyyaml==3.11",
         "marshmallow-dataclass==8.3.0",
         "pandas==1.1.5",
+        "hydra-core==1.0.6",
     ],
     license='MIT',
 )
