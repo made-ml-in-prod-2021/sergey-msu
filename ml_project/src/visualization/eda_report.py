@@ -35,11 +35,27 @@ def create_report(writer: Logger, config_params: EDAReportParams):
 
     """
     data = pd.read_csv(config_params.data_path)
+    summary = {}
 
     print_header(writer, config_params.data_path)
-    print_stats(writer, data)
-    print_distributions(writer, data)
-    print_correlations(writer, data)
+    print_stats(writer, data, summary)
+    print_distributions(writer, data, summary)
+    print_correlations(writer, data, summary)
+    print_summary(writer, summary)
+
+
+def print_summary(writer: Logger, summary: dict):
+    title = ' Summary '
+    writer.info('*'*(40 + len(title)))
+    writer.info('*'*20 + title + '*'*20)
+    writer.info('*'*(40 + len(title)))
+
+    writer.info('Statistics:')
+    writer.info(summary['stats'])
+    writer.info('Disributions:')
+    writer.info(summary['distr'])
+    writer.info('Correlations:')
+    writer.info(summary['corrs'])
 
 
 def print_header(writer: Logger, data_path: str):
@@ -61,7 +77,7 @@ def print_header(writer: Logger, data_path: str):
     writer.info(f'\nData source: {os.path.abspath(data_path)}\n')
 
 
-def print_stats(writer: Logger, data: pd.DataFrame):
+def print_stats(writer: Logger, data: pd.DataFrame, summary: dict):
     """
     Create EDA report.
 
@@ -71,16 +87,31 @@ def print_stats(writer: Logger, data: pd.DataFrame):
         Logger that acts as file writer.
     data: pd.DataFrame
         Dataframe.
+    summary: dict
+        Stats aggregation
 
     """
-    writer.info(f'*** Data shape:\n{data.shape}\n')
+    desc = data.describe().T
+    shape = data.shape
+    high_var = list(desc[desc['mean'] < desc['std']].index.values)
+    missing = len(data) - len(data.dropna())
+    traget_distr = dict(Counter(data[TARGET_COl]))
+
+    summary['stats'] = {
+        'shape': shape,
+        'high_var': high_var,
+        'missing': missing,
+        'trarget_distr': traget_distr
+    }
+
+    writer.info(f'*** Data shape:\n{shape}\n')
     writer.info(f'*** Head:\n{data.head()}\n')
     writer.info(f'*** Describe:\n{data.describe().round(2)}\n')
-    writer.info(f'*** Missing:\n{len(data) - len(data.dropna())}\n')
-    writer.info(f'*** Targets:\n{dict(Counter(data[TARGET_COl]))}\n')
+    writer.info(f'*** Missing:\n{missing}\n')
+    writer.info(f'*** Targets:\n{traget_distr}\n')
 
 
-def print_distributions(writer: Logger, data: pd.DataFrame):
+def print_distributions(writer: Logger, data: pd.DataFrame, summary: dict):
     """
     Print distribution analysis results.
 
@@ -90,6 +121,8 @@ def print_distributions(writer: Logger, data: pd.DataFrame):
         Logger that acts as file writer.
     data: pd.DataFrame
         Dataframe.
+    summary: dict
+        Stats aggregation
 
     """
     writer.info('*** Categorical Distributions:')
@@ -98,8 +131,10 @@ def print_distributions(writer: Logger, data: pd.DataFrame):
         writer.info(f'  {feat.ljust(max_len)}: {dict(Counter(data[feat]))}')
     writer.info('')
 
+    summary['distr'] = {'norm': NUM_FEATS[:3], 'lognorm': NUM_FEATS[3]}
 
-def print_correlations(writer: Logger, data: pd.DataFrame):
+
+def print_correlations(writer: Logger, data: pd.DataFrame, summary: dict):
     """
     Print correlation analysis results.
 
@@ -109,10 +144,20 @@ def print_correlations(writer: Logger, data: pd.DataFrame):
         Logger that acts as file writer.
     data: pd.DataFrame
         Dataframe.
+    summary: dict
+        Stats aggregation
 
     """
+    corr = data.corr().round(2)
+
+    summary['corrs'] = {'age': None, 'cp': None, 'slope': None}
+    for f in summary['corrs']:
+        c = corr[f]
+        c = c[abs(c) > 0.27]
+        summary['corrs'][f] = list(set(c.index) - set([f]))
+
     writer.info('*** Feature Correlations:')
-    writer.info(data.corr().round(2))
+    writer.info(corr)
 
 
 @hydra.main(config_path='../../configs/ext', config_name='eda_report')
@@ -132,6 +177,8 @@ def main(params: EDAReportParams):
                                  stdout=False,
                                  level=logging.INFO,
                                  mode='w+')
+    import os
+    print('>>>>', os.path.abspath(params.save_path))
     writer = create_logger(params.name, writer_params)
 
     setup_pandas()
