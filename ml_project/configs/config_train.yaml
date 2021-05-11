@@ -1,0 +1,9 @@
+hydra:
+  run:
+    dir: .
+  output_subdir: '../../../../out/.hydra'
+  job_logging: null
+
+defaults:
+  - app: train
+  - train: random_forest

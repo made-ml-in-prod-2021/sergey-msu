@@ -1,0 +1,7 @@
+click==7.1.2
+jupyterlab==3.0.13
+pandas==1.2.3
+hydra-core==1.0.6
+scikit-learn==0.23.0
+pytest==6.2.3
+flake8

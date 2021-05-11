@@ -1,0 +1,35 @@
+# @package _global_
+data_params:
+  data_path: '../../data/raw/heart.csv'
+  model_path: '../../models/model.pkl'
+  metric_path: '../../models/metrics.json'
+  params_path: '../../models/params.json'
+  splitting_params:
+    val_size: 0.3
+    random_state: 9
+feature_params:
+  num_missing: 'mean'
+  cat_missing: 'most_frequent'
+  transform_params:
+    quantile: 0.05
+    feats:
+      - 'trestbps'
+      - 'chol'
+      - 'oldpeak'
+      - 'thal'
+  categorical_feats:
+    - 'sex'
+    - 'cp'
+    - 'fbs'
+    - 'restecg'
+    - 'exang'
+    - 'slope'
+    - 'thal'
+  numerical_feats:
+    - 'age'
+    - 'trestbps'
+    - 'chol'
+    - 'thalach'
+    - 'oldpeak'
+    - 'ca'
+  target_col: 'target'
