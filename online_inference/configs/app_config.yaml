@@ -1,0 +1,24 @@
+host: '0.0.0.0'
+port: 8000
+model_path: '../models/model.pkl'
+features:
+  - 'age'
+  - 'sex'
+  - 'cp'
+  - 'trestbps'
+  - 'chol'
+  - 'fbs'
+  - 'restecg'
+  - 'thalach'
+  - 'exang'
+  - 'oldpeak'
+  - 'slope'
+  - 'ca'
+  - 'thal'
+logging:
+  path: '../../../out/logs/inference/online_inference.log'
+  format: '%(asctime)s %(levelname)s %(message)s'
+  date_format: '%Y-%m-%d %H:%M:%S'
+  level: 20  # INFO
+  mode: 'a'
+  stdout: True
