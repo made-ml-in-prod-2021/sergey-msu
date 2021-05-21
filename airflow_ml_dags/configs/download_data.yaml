@@ -1,0 +1,35 @@
+default_args:
+  start_date: '2021-05-20'
+  num_task_retries: 3
+  retry_delay: 1
+  execution_timeout: 60
+  owner: 'airflow',
+  email:
+    - 'airflow@example.com'
+dag_args:
+  schedule_interval: "1 * * * *"
+  dagrun_timeout: 300
+tasks_args:
+  download_data_hive:
+    name: 'hive_data'
+    output_path: '/data/raw/{{ ds }}/hive'
+    seed: 1
+  download_data_clickhouse:
+    name: 'clickhouse_data'
+    output_path: '/data/raw/{{ ds }}/clickhouse'
+    seed: 2
+  download_data_mongo:
+    name: 'mongo_data'
+    output_path: '/data/raw/{{ ds }}/mongo'
+    seed: 3
+  merge_data:
+    input_paths:
+      - '/data/raw/{{ ds }}/hive'
+      - '/data/raw/{{ ds }}/clickhouse'
+      - '/data/raw/{{ ds }}/mongo'
+    output_path: '/data/raw/{{ ds }}'
+  clean_data:
+    input_paths:
+      - '/data/raw/{{ ds }}/hive'
+      - '/data/raw/{{ ds }}/clickhouse'
+      - '/data/raw/{{ ds }}/mongo'
