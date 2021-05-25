@@ -29,21 +29,23 @@ with DAG('collect_data', default_args=default_args, **dag_args) as dag:
         network_mode='bridge',
         task_id='merge-data',
         do_xcom_push=False,
-        volumes=[
-            "/home/sergey/Work/courses/made/semester-2/ml-in-prod/sergey-msu/airflow_ml_dags/data:/data"
-        ]
+        wait_for_downstream=True,
+        depends_on_past=True,
+        volumes=[f"{tasks_args['local_docker_data_volume']}:/data"]
     )
 
-    clean_data_command = f'input-paths={merge_data_args["input_paths"]} '
+    clean_data_args = tasks_args['merge_data']
+    input_paths = [f'--input-paths \"{p}\" ' for p in clean_data_args["input_paths"]]
+    clean_data_command = ''.join(input_paths)
     clean_data = DockerOperator(
         image='sergey.polyanskikh/airflow-clean-data',
         command=clean_data_command,
         network_mode='bridge',
         task_id='clean-data',
         do_xcom_push=False,
-        volumes=[
-            "/home/sergey/Work/courses/made/semester-2/ml-in-prod/sergey-msu/airflow_ml_dags/data:/data"
-        ]
+        wait_for_downstream=True,
+        depends_on_past=True,
+        volumes=[f"{tasks_args['local_docker_data_volume']}:/data"]
     )
 
     sources = ['hive', 'clickhouse', 'mongo']
@@ -58,10 +60,9 @@ with DAG('collect_data', default_args=default_args, **dag_args) as dag:
             task_id=f"download-data-{source}",
             do_xcom_push=False,
             wait_for_downstream=True,
+            depends_on_past=True,
             auto_remove=True,
-            volumes=[
-                "/home/sergey/Work/courses/made/semester-2/ml-in-prod/sergey-msu/airflow_ml_dags/data:/data"
-            ]
+            volumes=[f"{tasks_args['local_docker_data_volume']}:/data"]
         )
 
         download_data_source >> merge_data

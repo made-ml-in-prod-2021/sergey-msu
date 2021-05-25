@@ -1,19 +1,16 @@
 import os
 import click
 import pandas as pd
-import logging
 
 
 @click.command('merge_data')
 @click.option('--input-paths', multiple=True)
 @click.option('--output-path')
 def merge_data(input_paths: list, output_path: str):
-    logging.critical('WWWWWWWWWWWWWWWWWWWWWWWWW')
-    logging.critical(input_paths)
-    logging.critical(output_path)
     X = []
     for input_path in input_paths:
-        X = pd.read_csv(os.path.join(input_path, 'data.csv'))
+        x = pd.read_csv(os.path.join(input_path, 'data.csv'))
+        X.append(x)
     X = pd.concat(X)
 
     y = X[['target']]

@@ -5,7 +5,7 @@ import click
 from sklearn.datasets import load_iris
 
 
-@click.command('download')
+@click.command('download_data')
 @click.option('--output-path')
 @click.option('--seed', type=int)
 def download_data(output_path: str, seed: int):

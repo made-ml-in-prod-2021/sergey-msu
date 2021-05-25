@@ -8,9 +8,10 @@ default_args:
   email:
     - 'airflow@example.com'
 dag_args:
-  schedule_interval: "1 * * * *"
-  dagrun_timeout: 300
+  schedule_interval: "0 0 * * *"
+  dagrun_timeout: 30
 tasks_args:
+  local_docker_data_volume: '/home/sergey/Work/courses/made/semester-2/ml-in-prod/sergey-msu/airflow_ml_dags/data'
   download_data_hive:
     name: 'hive_data'
     output_path: '/data/raw/{{ ds }}/hive'

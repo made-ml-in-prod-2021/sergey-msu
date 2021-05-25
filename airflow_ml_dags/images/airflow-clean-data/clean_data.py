@@ -1,12 +1,12 @@
-import os
 import click
+import shutil
 
 
-@click.command('merge_data')
-@click.argument('input-paths', multiple=True)
+@click.command('clean_data')
+@click.option('--input-paths', multiple=True)
 def clean_data(input_paths: list):
     for input_path in input_paths:
-        os.remove(input_path)
+        shutil.rmtree(input_path)
 
 
 if __name__ == '__main__':
