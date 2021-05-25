@@ -1,18 +1,19 @@
 import os
+import time
 import numpy as np
 import click
 from sklearn.datasets import load_iris
 
 
-@click.command('download_data')
-@click.option('--name')
-@click.option('--output-path', multiple=True)
-@click.option('--seed')
-def download_data(name: str, output_path: str, seed: int):
+@click.command('download')
+@click.option('--output-path')
+@click.option('--seed', type=int)
+def download_data(output_path: str, seed: int):
     np.random.seed(seed)
 
     X, y = load_iris(return_X_y=True, as_frame=True)
-    X.values += np.random.random(X.size)
+    time.sleep(seed % 3)
+    X.values[:, :] = X.values + np.random.random(X.shape)
     X['target'] = y
 
     os.makedirs(output_path, exist_ok=True)

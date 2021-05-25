@@ -3,7 +3,8 @@ default_args:
   num_task_retries: 3
   retry_delay: 1
   execution_timeout: 60
-  owner: 'airflow',
+  depends_on_past: True
+  owner: 'airflow'
   email:
     - 'airflow@example.com'
 dag_args:

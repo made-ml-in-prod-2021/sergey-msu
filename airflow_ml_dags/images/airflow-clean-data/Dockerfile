@@ -1,5 +1,5 @@
-FROM sergeypolyanskikh/airflow-ml-base:latest
+FROM sergey.polyanskikh/airflow-ml-base:latest
 
-COPY merge_data.py /merge_data.py
+COPY clean_data.py /clean_data.py
 
 ENTRYPOINT ['python', 'clean_data.py']

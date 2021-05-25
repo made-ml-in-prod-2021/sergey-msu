@@ -13,19 +13,20 @@ x-airflow-image: &airflow_image apache/airflow:2.0.0-python3.6
 # ====================================== /AIRFLOW ENVIRONMENT VARIABLES ======================================
 services:
   postgres:
-    image: postgres:12-alpine
+    image: postgres:13
     environment:
       - POSTGRES_USER=airflow
       - POSTGRES_PASSWORD=airflow
       - POSTGRES_DB=airflow
     ports:
       - "5432:5432"
+
   init:
     build:
       context: images/airflow-docker
       args:
         AIRFLOW_BASE_IMAGE: *airflow_image
-    image: sergeypolyanskikh/airflow-docker
+    image: sergey.polyanskikh/airflow-docker
     depends_on:
       - postgres
     environment: *airflow_environment
@@ -37,7 +38,7 @@ services:
       context: images/airflow-docker
       args:
         AIRFLOW_BASE_IMAGE: *airflow_image
-    image: sergeypolyanskikh/airflow-docker
+    image: sergey.polyanskikh/airflow-docker
 
     restart: always
     depends_on:
@@ -54,13 +55,14 @@ services:
       context: images/airflow-docker
       args:
         AIRFLOW_BASE_IMAGE: *airflow_image
-    image: sergeypolyanskikh/airflow-docker
+    image: sergey.polyanskikh/airflow-docker
 
     restart: always
     depends_on:
       - postgres
     volumes:
       - logs:/opt/airflow/logs
+      - ./configs/:/opt/airflow/configs/
       - ./dags/:/opt/airflow/dags/
       - ./data/:/opt/airflow/data/
       - /var/run/docker.sock:/var/run/docker.sock
@@ -70,25 +72,25 @@ services:
   ml_base:
     build:
       context: images/airflow-ml-base
-    image: sergeypolyanskikh/airflow-ml-base
-    restart: "no"
-
-  predict:
-    build:
-      context: images/airflow-predict
-    image: sergeypolyanskikh/airflow-predict
+    image: sergey.polyanskikh/airflow-ml-base
     restart: "no"
 
   download:
     build:
       context: images/airflow-download-data
-    image: sergeypolyanskikh/airflow-download
+    image: sergey.polyanskikh/airflow-download-data
     restart: "no"
 
-  preprocess:
+  merge_data:
     build:
-      context: images/airflow-preprocess
-    image: sergeypolyanskikh/airflow-preprocess
+      context: images/airflow-merge-data
+    image: sergey.polyanskikh/airflow-merge-data
+    restart: "no"
+
+  clean_data:
+    build:
+      context: images/airflow-clean-data
+    image: sergey.polyanskikh/airflow-clean-data
     restart: "no"
 
 volumes:
