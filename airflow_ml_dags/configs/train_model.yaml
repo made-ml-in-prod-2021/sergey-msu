@@ -1,0 +1,35 @@
+default_args:
+  start_date: '2021-05-01'
+  num_task_retries: 3
+  retry_delay: 1
+  dagrun_timeout: 30
+  execution_timeout: 60
+  depends_on_past: True
+  owner: 'airflow'
+  email:
+    - 'airflow@example.com'
+dag_args:
+  schedule_interval: "0 0 * * 1"
+tasks_args:
+  local_data_volume: '/home/sergey/Work/courses/made/semester-2/ml-in-prod/sergey-msu/airflow_ml_dags'
+  data_sensor:
+    input_path: 'data/raw/{{ ds }}/'
+    features_file: 'data.csv'
+    target_file: 'y.csv'
+  data_prepare:
+    input_path: '/data/raw/{{ ds }}/'
+    output_path: '/data/processed/{{ ds }}/'
+  data_split:
+    input_path: '/data/processed/{{ ds }}/'
+    output_path: '/data/processed/{{ ds }}/'
+    train_size: 0.8
+    shuffle: True
+  model_train:
+    input_path: '/data/processed/{{ ds }}/'
+    model_file: '/data/models/{{ ds }}/model.pkl'
+  model_validate:
+    input_path: '/data/processed/{{ ds }}/'
+    output_path: '/data/models/{{ ds }}/stats.json'
+    model_file: '/data/models/{{ ds }}/model.pkl'
+  clean_data:
+    input_path: '/data/processed/{{ ds }}/'

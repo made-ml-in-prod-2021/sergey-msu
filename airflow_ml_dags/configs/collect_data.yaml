@@ -1,7 +1,8 @@
 default_args:
-  start_date: '2021-05-20'
+  start_date: '2021-05-01'
   num_task_retries: 3
   retry_delay: 1
+  dagrun_timeout: 30
   execution_timeout: 60
   depends_on_past: True
   owner: 'airflow'
@@ -9,9 +10,14 @@ default_args:
     - 'airflow@example.com'
 dag_args:
   schedule_interval: "0 0 * * *"
-  dagrun_timeout: 30
 tasks_args:
-  local_docker_data_volume: '/home/sergey/Work/courses/made/semester-2/ml-in-prod/sergey-msu/airflow_ml_dags/data'
+  local_docker_data_volume:
+  default_args:
+    network_mode: 'bridge'
+    do_xcom_push: False
+    wait_for_downstream: True
+    volumes:
+      - '/home/sergey/Work/courses/made/semester-2/ml-in-prod/sergey-msu/airflow_ml_dags/data:/data'
   download_data_hive:
     name: 'hive_data'
     output_path: '/data/raw/{{ ds }}/hive'

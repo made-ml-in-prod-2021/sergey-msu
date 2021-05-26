@@ -3,7 +3,7 @@ version: '3.7'
 x-environment: &airflow_environment
   - AIRFLOW__CORE__EXECUTOR=LocalExecutor
   - AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS=False
-  - AIRFLOW__CORE__LOAD_EXAMPLES=True
+  - AIRFLOW__CORE__LOAD_EXAMPLES=False
   - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql://airflow:airflow@postgres:5432/airflow
   - AIRFLOW__CORE__STORE_DAG_CODE=True
   - AIRFLOW__CORE__STORE_SERIALIZED_DAGS=True
@@ -32,7 +32,7 @@ services:
       - postgres
     environment: *airflow_environment
     entrypoint: /bin/bash
-    command: -c 'airflow db init && airflow users create --username admin --password admin --firstname Anonymous --lastname Admin --role Admin --email admin@example.org'
+    command: -c 'airflow db init && airflow users create --username admin --password admin --firstname Anonymous --lastname Admin --role Admin --email admin@example.org && airflow connections add fs_default --conn-type fs'
 
   webserver:
     build:
@@ -76,7 +76,7 @@ services:
     image: sergey.polyanskikh/airflow-ml-base
     restart: "no"
 
-  download:
+  download_data:
     build:
       context: images/airflow-download-data
     image: sergey.polyanskikh/airflow-download-data
@@ -93,6 +93,30 @@ services:
       context: images/airflow-clean-data
     image: sergey.polyanskikh/airflow-clean-data
     restart: "no"
+
+#  data_prepare:
+#    build:
+#      context: images/airflow-data-prepare
+#    image: sergey.polyanskikh/airflow-data-prepare
+#    restart: "no"
+#
+#  data_split:
+#    build:
+#      context: images/airflow-data-split
+#    image: sergey.polyanskikh/airflow-data-split
+#    restart: "no"
+#
+#  model_train:
+#    build:
+#      context: images/airflow-model-train
+#    image: sergey.polyanskikh/airflow-model-train
+#    restart: "no"
+#
+#  model_validate:
+#    build:
+#      context: images/airflow-model-validate
+#    image: sergey.polyanskikh/airflow-model-validate
+#    restart: "no"
 
 volumes:
   logs:
