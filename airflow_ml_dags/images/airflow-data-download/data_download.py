@@ -5,10 +5,10 @@ import click
 from sklearn.datasets import load_iris
 
 
-@click.command('download_data')
+@click.command('data_download')
 @click.option('--output-path')
 @click.option('--seed', type=int)
-def download_data(output_path: str, seed: int):
+def data_download(output_path: str, seed: int):
     np.random.seed(seed)
 
     X, y = load_iris(return_X_y=True, as_frame=True)
@@ -21,4 +21,4 @@ def download_data(output_path: str, seed: int):
 
 
 if __name__ == '__main__':
-    download_data()
+    data_download()

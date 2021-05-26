@@ -11,32 +11,31 @@ default_args:
 dag_args:
   schedule_interval: "0 0 * * *"
 tasks_args:
-  local_docker_data_volume:
   default_args:
     network_mode: 'bridge'
     do_xcom_push: False
     wait_for_downstream: True
     volumes:
       - '/home/sergey/Work/courses/made/semester-2/ml-in-prod/sergey-msu/airflow_ml_dags/data:/data'
-  download_data_hive:
+  data_download_hive:
     name: 'hive_data'
     output_path: '/data/raw/{{ ds }}/hive'
     seed: 1
-  download_data_clickhouse:
+  data_download_clickhouse:
     name: 'clickhouse_data'
     output_path: '/data/raw/{{ ds }}/clickhouse'
     seed: 2
-  download_data_mongo:
+  data_download_mongo:
     name: 'mongo_data'
     output_path: '/data/raw/{{ ds }}/mongo'
     seed: 3
-  merge_data:
+  data_merge:
     input_paths:
       - '/data/raw/{{ ds }}/hive'
       - '/data/raw/{{ ds }}/clickhouse'
       - '/data/raw/{{ ds }}/mongo'
     output_path: '/data/raw/{{ ds }}'
-  clean_data:
+  data_clean:
     input_paths:
       - '/data/raw/{{ ds }}/hive'
       - '/data/raw/{{ ds }}/clickhouse'

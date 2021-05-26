@@ -76,47 +76,47 @@ services:
     image: sergey.polyanskikh/airflow-ml-base
     restart: "no"
 
-  download_data:
+  data_download:
     build:
-      context: images/airflow-download-data
-    image: sergey.polyanskikh/airflow-download-data
+      context: images/airflow-data-download
+    image: sergey.polyanskikh/airflow-data-download
     restart: "no"
 
   merge_data:
     build:
-      context: images/airflow-merge-data
-    image: sergey.polyanskikh/airflow-merge-data
+      context: images/airflow-data-merge
+    image: sergey.polyanskikh/airflow-data-merge
     restart: "no"
 
   clean_data:
     build:
-      context: images/airflow-clean-data
-    image: sergey.polyanskikh/airflow-clean-data
+      context: images/airflow-data-clean
+    image: sergey.polyanskikh/airflow-data-clean
     restart: "no"
 
-#  data_prepare:
-#    build:
-#      context: images/airflow-data-prepare
-#    image: sergey.polyanskikh/airflow-data-prepare
-#    restart: "no"
-#
-#  data_split:
-#    build:
-#      context: images/airflow-data-split
-#    image: sergey.polyanskikh/airflow-data-split
-#    restart: "no"
-#
-#  model_train:
-#    build:
-#      context: images/airflow-model-train
-#    image: sergey.polyanskikh/airflow-model-train
-#    restart: "no"
-#
-#  model_validate:
-#    build:
-#      context: images/airflow-model-validate
-#    image: sergey.polyanskikh/airflow-model-validate
-#    restart: "no"
+  data_prepare:
+    build:
+      context: images/airflow-data-prepare
+    image: sergey.polyanskikh/airflow-data-prepare
+    restart: "no"
+
+  data_split:
+    build:
+      context: images/airflow-data-split
+    image: sergey.polyanskikh/airflow-data-split
+    restart: "no"
+
+  model_train:
+    build:
+      context: images/airflow-model-train
+    image: sergey.polyanskikh/airflow-model-train
+    restart: "no"
+
+  model_validate:
+    build:
+      context: images/airflow-model-validate
+    image: sergey.polyanskikh/airflow-model-validate
+    restart: "no"
 
 volumes:
   logs:

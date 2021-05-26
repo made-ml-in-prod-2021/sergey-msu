@@ -9,41 +9,41 @@ DAG_NAME = 'collect_data'
 default_args, dag_args, tasks_args = load_args(__name__, DAG_NAME)
 
 with DAG(DAG_NAME, default_args=default_args, **dag_args) as dag:
-    merge_data_args = tasks_args['merge_data']
+    data_merge_args = tasks_args['data_merge']
     input_paths = [f'--input-paths \"{p}\" '
-                   for p in merge_data_args["input_paths"]]
-    output_path = f'--output-path \"{merge_data_args["output_path"]}\"'
-    merge_data_command = ''.join(input_paths) + output_path
-    merge_data = DockerOperator(
+                   for p in data_merge_args["input_paths"]]
+    output_path = f'--output-path \"{data_merge_args["output_path"]}\"'
+    data_merge_command = ''.join(input_paths) + output_path
+    data_merge = DockerOperator(
         task_id='merge-data',
-        image='sergey.polyanskikh/airflow-merge-data',
-        command=merge_data_command,
+        image='sergey.polyanskikh/airflow-data-merge',
+        command=data_merge_command,
         **tasks_args['default_args'],
     )
 
-    clean_data_args = tasks_args['merge_data']
+    data_clean_args = tasks_args['data_clean']
     input_paths = [f'--input-paths \"{p}\" '
-                   for p in clean_data_args["input_paths"]]
-    clean_data_command = ''.join(input_paths)
-    clean_data = DockerOperator(
+                   for p in data_clean_args["input_paths"]]
+    data_clean_command = ''.join(input_paths)
+    data_clean = DockerOperator(
         task_id='clean-data',
-        image='sergey.polyanskikh/airflow-clean-data',
-        command=clean_data_command,
+        image='sergey.polyanskikh/airflow-data-clean',
+        command=data_clean_command,
         **tasks_args['default_args'],
     )
 
     sources = ['hive', 'clickhouse', 'mongo']
     for source in sources:
-        source_args = tasks_args[f'download_data_{source}']
+        source_args = tasks_args[f'data_download_{source}']
         source_command = f'--output-path \'{source_args["output_path"]}\' ' \
                          f'--seed {source_args["seed"]}'
-        download_data_source = DockerOperator(
-            task_id=f"download-data-{source}",
-            image="sergey.polyanskikh/airflow-download-data",
+        data_download_source = DockerOperator(
+            task_id=f"data-download-{source}",
+            image="sergey.polyanskikh/airflow-data-download",
             command=source_command,
             **tasks_args['default_args'],
         )
 
-        download_data_source >> merge_data
+        data_download_source >> data_merge
 
-    merge_data >> clean_data
+    data_merge >> data_clean

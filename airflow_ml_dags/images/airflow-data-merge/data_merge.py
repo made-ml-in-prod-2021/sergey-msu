@@ -3,10 +3,10 @@ import click
 import pandas as pd
 
 
-@click.command('merge_data')
+@click.command('data_merge')
 @click.option('--input-paths', multiple=True)
 @click.option('--output-path')
-def merge_data(input_paths: list, output_path: str):
+def data_merge(input_paths: list, output_path: str):
     X = []
     for input_path in input_paths:
         x = pd.read_csv(os.path.join(input_path, 'data.csv'))
@@ -22,4 +22,4 @@ def merge_data(input_paths: list, output_path: str):
 
 
 if __name__ == '__main__':
-    merge_data()
+    data_merge()
