@@ -1,8 +1,7 @@
+import logging
 from datetime import timedelta
 import yaml
 from pkg_resources import resource_filename
-from airflow import settings
-from airflow.models import Connection
 
 
 def load_args(res_name: str, dag_name: str):

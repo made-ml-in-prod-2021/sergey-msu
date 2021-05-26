@@ -14,7 +14,7 @@ tasks_args:
   default_args:
     network_mode: 'bridge'
     do_xcom_push: False
-    wait_for_downstream: True
+    wait_for_downstream: False
     volumes:
       - '/home/sergey/Work/courses/made/semester-2/ml-in-prod/sergey-msu/airflow_ml_dags/data:/data'
   data_sensor:
@@ -31,10 +31,9 @@ tasks_args:
     shuffle: True
   model_train:
     input_path: 'data/processed/{{ ds }}/'
-    model_file: 'data/models/{{ ds }}/model.pkl'
+    output_path: 'data/models/{{ ds }}/'
   model_validate:
     input_path: 'data/processed/{{ ds }}/'
-    output_path: 'data/models/{{ ds }}/stats.json'
-    model_file: 'data/models/{{ ds }}/model.pkl'
+    output_path: 'data/models/{{ ds }}/'
   data_clean:
     input_path: 'data/processed/{{ ds }}/'

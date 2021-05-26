@@ -33,7 +33,7 @@ with DAG(DAG_NAME, default_args=default_args, **dag_args) as dag:
 
     data_prepare_args = tasks_args['data_prepare']
     data_prepare_command = \
-        f'--output-path \"{data_prepare_args["input_path"]}\" ' \
+        f'--input-path \"{data_prepare_args["input_path"]}\" ' \
         f'--output-path \"{data_prepare_args["output_path"]}\"'
     data_prepare = DockerOperator(
         task_id='data-prepare',
@@ -44,7 +44,7 @@ with DAG(DAG_NAME, default_args=default_args, **dag_args) as dag:
 
     data_split_args = tasks_args['data_split']
     data_split_command = \
-        f'--output-path \"{data_split_args["input_path"]}\" ' \
+        f'--input-path \"{data_split_args["input_path"]}\" ' \
         f'--output-path \"{data_split_args["output_path"]}\" ' \
         f'--train-size \"{data_split_args["train_size"]}\" ' \
         f'--shuffle \"{data_split_args["shuffle"]}\"'
@@ -58,7 +58,7 @@ with DAG(DAG_NAME, default_args=default_args, **dag_args) as dag:
     model_train_args = tasks_args['model_train']
     model_train_command = \
         f'--input-path \"{model_train_args["input_path"]}\" ' \
-        f'--model-file \"{model_train_args["model_file"]}\"'
+        f'--output-path \"{model_train_args["output_path"]}\"'
     model_train = DockerOperator(
         task_id='model-train',
         image='sergey.polyanskikh/airflow-model-train',
@@ -69,8 +69,7 @@ with DAG(DAG_NAME, default_args=default_args, **dag_args) as dag:
     model_validate_args = tasks_args['model_validate']
     model_validate_command = \
         f'--input-path \"{model_validate_args["input_path"]}\" ' \
-        f'--output-path \"{model_validate_args["output_path"]}\" ' \
-        f'--model-file \"{model_train_args["model_file"]}\"'
+        f'--output-path \"{model_validate_args["output_path"]}\" '
     model_validate = DockerOperator(
         task_id='model-validate',
         image='sergey.polyanskikh/airflow-model-validate',

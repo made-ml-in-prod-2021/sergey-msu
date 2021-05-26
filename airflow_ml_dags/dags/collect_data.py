@@ -35,7 +35,8 @@ with DAG(DAG_NAME, default_args=default_args, **dag_args) as dag:
     sources = ['hive', 'clickhouse', 'mongo']
     for source in sources:
         source_args = tasks_args[f'data_download_{source}']
-        source_command = f'--output-path \'{source_args["output_path"]}\' ' \
+        source_command = f'--name {source_args["name"]} ' \
+                         f'--output-path \'{source_args["output_path"]}\' ' \
                          f'--seed {source_args["seed"]}'
         data_download_source = DockerOperator(
             task_id=f"data-download-{source}",
