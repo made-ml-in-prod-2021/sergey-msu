@@ -15,7 +15,7 @@ def model_train(input_path: str, output_path: str):
     log('Begin train model...')
 
     if not os.path.exists(input_path):
-        raise ValueError(f'Data path {input_path or "None"} does not exist')
+        raise ValueError(f'Data path {input_path} does not exist')
 
     data_train_path = os.path.join(input_path, 'data_train.csv')
     if not os.path.exists(data_train_path):

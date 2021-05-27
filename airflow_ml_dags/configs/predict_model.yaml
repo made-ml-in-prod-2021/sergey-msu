@@ -9,7 +9,7 @@ default_args:
   email:
     - 'airflow@example.com'
 dag_args:
-  schedule_interval: "0 0 * * 1"
+  schedule_interval: "0 0 * * *"
   max_active_runs: 1
 tasks_args:
   default_args:
@@ -20,22 +20,15 @@ tasks_args:
       - '/home/sergey/Work/courses/made/semester-2/ml-in-prod/sergey-msu/airflow_ml_dags/data:/data'
   data_sensor:
     input_path: 'data/raw/{{ ds }}/'
-    features_file: 'data.csv'
-    target_file: 'target.csv'
+    data_file: 'data.csv'
   data_prepare:
     input_path: 'data/raw/{{ ds }}/'
-    output_path: 'data/processed/{{ ds }}/'
-    mode: 'train'
-  data_split:
-    input_path: 'data/processed/{{ ds }}/'
-    output_path: 'data/processed/{{ ds }}/'
-    train_size: 0.8
-    shuffle: True
-  model_train:
-    input_path: 'data/processed/{{ ds }}/'
-    output_path: 'data/models/{{ ds }}/'
-  model_validate:
-    input_path: 'data/processed/{{ ds }}/'
-    output_path: 'data/models/{{ ds }}/'
+    output_path: 'data/prepared/{{ ds }}/'
+    mode: 'pred'
+  model_predict:
+    input_path: 'data/prepared/{{ ds }}/'
+    output_path: 'data/predictions/{{ ds }}/'
+    airflow_var_name: 'PROD_MODEL'
+    model_path: '{{ var.value.PROD_MODEL }}'
   data_clean:
-    input_path: 'data/processed/{{ ds }}/'
+    input_path: 'data/prepared/{{ ds }}/'

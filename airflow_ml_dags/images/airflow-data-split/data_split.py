@@ -15,7 +15,7 @@ def data_split(input_path: str, output_path: str, train_size: float,
     log('Begin split data...')
 
     if not os.path.exists(input_path):
-        raise ValueError(f'Data path {input_path or "None"} does not exist')
+        raise ValueError(f'Data path {input_path} does not exist')
 
     data_path = os.path.join(input_path, 'data.csv')
     if not os.path.exists(data_path):

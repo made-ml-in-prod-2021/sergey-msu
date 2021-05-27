@@ -23,7 +23,7 @@ def data_merge(input_paths: list, output_path: str):
     log(f'Save result data to {output_path}...')
     os.makedirs(output_path, exist_ok=True)
     X.to_csv(os.path.join(output_path, 'data.csv'), index=False)
-    y.to_csv(os.path.join(output_path, 'y.csv'), index=False)
+    y.to_csv(os.path.join(output_path, 'target.csv'), index=False)
 
     log(f'Data merged and saved successfully')
 

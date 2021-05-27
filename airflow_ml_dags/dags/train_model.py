@@ -4,8 +4,8 @@ from airflow.providers.docker.operators.docker import DockerOperator
 from airflow.operators.dummy import DummyOperator
 from airflow.sensors.filesystem import FileSensor
 
-
 from utils import load_args
+
 
 DAG_NAME = 'train_model'
 
@@ -34,7 +34,8 @@ with DAG(DAG_NAME, default_args=default_args, **dag_args) as dag:
     data_prepare_args = tasks_args['data_prepare']
     data_prepare_command = \
         f'--input-path \"{data_prepare_args["input_path"]}\" ' \
-        f'--output-path \"{data_prepare_args["output_path"]}\"'
+        f'--output-path \"{data_prepare_args["output_path"]}\" ' \
+        f'--mode \"{data_prepare_args["mode"]}\"'
     data_prepare = DockerOperator(
         task_id='data-prepare',
         image='sergey.polyanskikh/airflow-data-prepare',

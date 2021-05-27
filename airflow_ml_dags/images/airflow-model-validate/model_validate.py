@@ -14,9 +14,9 @@ def model_validate(input_path: str, output_path: str):
     log('Begin validate model...')
 
     if not os.path.exists(input_path):
-        raise ValueError(f'Data path {input_path or "None"} does not exist')
+        raise ValueError(f'Data path {input_path} does not exist')
     if not os.path.exists(output_path):
-        raise ValueError(f'Model path {output_path or "None"} does not exist')
+        raise ValueError(f'Model path {output_path} does not exist')
 
     data_valid_path = os.path.join(input_path, 'data_valid.csv')
     if not os.path.exists(data_valid_path):
