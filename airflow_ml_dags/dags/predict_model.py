@@ -9,6 +9,8 @@ from utils import load_args
 DAG_NAME = 'predict_model'
 default_args, dag_args, tasks_args = load_args(__name__, DAG_NAME)
 
+# import airflow
+# airflow.utils.email.send_email('spmathf@gmail.com', 'Airflow TEST HERE', 'This is airflow status success')
 
 with DAG(DAG_NAME, default_args=default_args, **dag_args) as dag:
     data_sensor_args = tasks_args['data_sensor']

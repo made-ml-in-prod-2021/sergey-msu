@@ -5,9 +5,10 @@ default_args:
   dagrun_timeout: 30
   execution_timeout: 60
   depends_on_past: True
-  owner: 'airflow'
+  email_on_failure: True
+  owner: 'sergei.polianskikh'
   email:
-    - 'airflow@example.com'
+    - 'spmathf@gmail.com'
 dag_args:
   schedule_interval: "0 0 * * *"
 tasks_args:
