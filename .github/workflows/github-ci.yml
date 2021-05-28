@@ -4,7 +4,7 @@ name: MADE-2021 Test ML App
 
 on:
   push:
-    branches: [ homework1 ]
+    branches: [ homework3 ]
   pull_request:
     branches: [ main ]
 
