@@ -9,14 +9,12 @@ from utils import load_args
 DAG_NAME = 'predict_model'
 default_args, dag_args, tasks_args = load_args(__name__, DAG_NAME)
 
-# import airflow
-# airflow.utils.email.send_email('spmathf@gmail.com', 'Airflow TEST HERE', 'This is airflow status success')
 
 with DAG(DAG_NAME, default_args=default_args, **dag_args) as dag:
     data_sensor_args = tasks_args['data_sensor']
 
     wait_for_data = FileSensor(
-        task_id='wait_for_data',
+        task_id='wait-for-data',
         poke_interval=10,
         retries=100,
         filepath=os.path.join(data_sensor_args['input_path'],

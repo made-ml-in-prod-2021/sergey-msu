@@ -8,7 +8,7 @@ import pandas as pd
 @click.option('--input-paths', multiple=True)
 @click.option('--output-path')
 def data_merge(input_paths: list, output_path: str):
-    log(f'Begin merge data from different data sources...')
+    log('Begin merge data from different data sources...')
 
     X = []
     for input_path in input_paths:

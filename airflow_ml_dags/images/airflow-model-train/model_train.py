@@ -26,17 +26,17 @@ def model_train(input_path: str, output_path: str):
     X_train = data_train.drop('target', axis=1)
     y_train = data_train['target'].values
 
-    log(f'Grid search train model...')
+    log('Grid search train model...')
     model = RandomForestClassifier(random_state=9)
     params = {'n_estimators': [10, 30, 50],
               'max_depth': [1, 5, 10]}
     cv = StratifiedKFold(n_splits=3, shuffle=True, random_state=9)
     grid = GridSearchCV(model, params, cv=cv, n_jobs=-1)
     grid.fit(X_train, y_train)
-    log(f'Best model accuracy:' + str(round(grid.best_score_, 2)))
-    log(f'Best model params:' + str(grid.best_params_))
+    log('Best model accuracy:' + str(round(grid.best_score_, 2)))
+    log('Best model params:' + str(grid.best_params_))
 
-    log(f'Save model and train results...')
+    log('Save model and train results...')
     os.makedirs(output_path, exist_ok=True)
 
     with open(os.path.join(output_path, 'model.pkl'), 'wb') as f:

@@ -35,7 +35,7 @@ def data_prepare(input_path: str, output_path: str, mode: str):
 
     X.to_csv(os.path.join(output_path, 'data.csv'), index=False)
 
-    log(f'Data prepared successfully')
+    log('Data prepared successfully')
 
 
 def log(message):

@@ -1,4 +1,5 @@
 from airflow import DAG
+from airflow.operators.dummy import DummyOperator
 from airflow.providers.docker.operators.docker import DockerOperator
 
 from utils import load_args
@@ -9,6 +10,8 @@ DAG_NAME = 'collect_data'
 default_args, dag_args, tasks_args = load_args(__name__, DAG_NAME)
 
 with DAG(DAG_NAME, default_args=default_args, **dag_args) as dag:
+    start_task = DummyOperator(task_id='begin-collect-data')
+
     data_merge_args = tasks_args['data_merge']
     input_paths = [f'--input-paths \"{p}\" '
                    for p in data_merge_args["input_paths"]]
@@ -33,6 +36,7 @@ with DAG(DAG_NAME, default_args=default_args, **dag_args) as dag:
     )
 
     sources = ['hive', 'clickhouse', 'mongo']
+    data_tasks = []
     for source in sources:
         source_args = tasks_args[f'data_download_{source}']
         source_command = f'--name {source_args["name"]} ' \
@@ -45,6 +49,6 @@ with DAG(DAG_NAME, default_args=default_args, **dag_args) as dag:
             **tasks_args['default_args'],
         )
 
-        data_download_source >> data_merge
+        data_tasks.append(data_download_source)
 
-    data_merge >> data_clean
+    start_task >> data_tasks >> data_merge >> data_clean

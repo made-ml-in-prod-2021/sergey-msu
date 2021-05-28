@@ -12,19 +12,19 @@ DAG_NAME = 'train_model'
 default_args, dag_args, tasks_args = load_args(__name__, DAG_NAME)
 
 with DAG(DAG_NAME, default_args=default_args, **dag_args) as dag:
-    start_task = DummyOperator(task_id='begin_train')
+    start_task = DummyOperator(task_id='begin-train')
 
     data_sensor_args = tasks_args['data_sensor']
 
     wait_for_features = FileSensor(
-        task_id='wait_for_features',
+        task_id='wait-for-features',
         poke_interval=10,
         retries=100,
         filepath=os.path.join(data_sensor_args['input_path'],
                               data_sensor_args['features_file'])
     )
     wait_for_target = FileSensor(
-        task_id='wait_for_target',
+        task_id='wait-for-target',
         poke_interval=10,
         retries=100,
         filepath=os.path.join(data_sensor_args['input_path'],
@@ -87,7 +87,7 @@ with DAG(DAG_NAME, default_args=default_args, **dag_args) as dag:
         **tasks_args['default_args'],
     )
 
-    end_task = DummyOperator(task_id='end_train')
+    end_task = DummyOperator(task_id='end-train')
 
     start_task >> \
         [wait_for_features, wait_for_target] >> data_prepare >> data_split >> \

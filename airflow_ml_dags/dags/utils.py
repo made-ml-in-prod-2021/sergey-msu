@@ -1,4 +1,3 @@
-import logging
 from datetime import timedelta
 import yaml
 from pkg_resources import resource_filename
