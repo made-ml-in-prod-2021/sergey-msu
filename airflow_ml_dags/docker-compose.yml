@@ -13,7 +13,7 @@ x-environment: &airflow_environment
   - AIRFLOW__LOGGING__FAB_LOGGING_LEVEL=INFO
   - AIRFLOW__SMTP__SMTP_HOST=smtp.gmail.com
   - AIRFLOW__SMTP__SMTP_PORT=587
-  - AIRFLOW__SMTP__SMTP_USER=spmathf@gmail.com
+  - AIRFLOW__SMTP__SMTP_USER="${GMAIL_APP_USERNAME}"
   - AIRFLOW__SMTP__SMTP_PASSWORD="${GMAIL_APP_PASSWORD}"
 
 x-airflow-image: &airflow_image apache/airflow:2.0.0-python3.6
