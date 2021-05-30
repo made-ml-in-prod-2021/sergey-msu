@@ -22,6 +22,8 @@ tasks_args:
   data_sensor:
     input_path: 'data/raw/{{ ds }}/'
     data_file: 'data.csv'
+  model_sensor:
+    model_path: '{{ var.value.PROD_MODEL }}'
   data_prepare:
     input_path: 'data/raw/{{ ds }}/'
     output_path: 'data/prepared/{{ ds }}/'

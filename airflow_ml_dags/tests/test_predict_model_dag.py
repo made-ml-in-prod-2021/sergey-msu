@@ -19,7 +19,9 @@ def test_predict_model_dag_import(dag_bag):
     dag = dag_bag.dags['predict_model']
 
     assert dag.tasks is not None
-    assert len(dag.tasks) == 4
+    assert len(dag.tasks) == 6
+    assert 'begin-make-predictions' in dag.task_dict
+    assert 'wait-for-model' in dag.task_dict
     assert 'wait-for-data' in dag.task_dict
     assert 'data-prepare' in dag.task_dict
     assert 'model-predict' in dag.task_dict
@@ -30,7 +32,9 @@ def test_predict_model_dag_structure(dag_bag):
     dag = dag_bag.dags['predict_model']
 
     structure = {
+        'begin-make-predictions': ['wait-for-data', 'wait-for-model'],
         'wait-for-data': ['data-prepare'],
+        'wait-for-model': ['data-prepare'],
         'data-prepare': ['model-predict'],
         'model-predict': ['data-clean'],
         'data-clean': [],
