@@ -33,31 +33,34 @@ with DAG(DAG_NAME, default_args=default_args, **dag_args) as dag:
 
     data_prepare_args = tasks_args['data_prepare']
     data_prepare_command = \
+        'python data_prepare.py ' \
         f'--input-path \"{data_prepare_args["input_path"]}\" ' \
         f'--output-path \"{data_prepare_args["output_path"]}\" ' \
         f'--mode \"{data_prepare_args["mode"]}\"'
     data_prepare = DockerOperator(
         task_id='data-prepare',
-        image='sergey.polyanskikh/airflow-data-prepare',
+        image='sergey.polyanskikh/airflow-data-utils',
         command=data_prepare_command,
         **tasks_args['default_args'],
     )
 
     data_split_args = tasks_args['data_split']
     data_split_command = \
+        'python data_split.py ' \
         f'--input-path \"{data_split_args["input_path"]}\" ' \
         f'--output-path \"{data_split_args["output_path"]}\" ' \
         f'--train-size \"{data_split_args["train_size"]}\" ' \
         f'--shuffle \"{data_split_args["shuffle"]}\"'
     data_split = DockerOperator(
         task_id='data-split',
-        image='sergey.polyanskikh/airflow-data-split',
+        image='sergey.polyanskikh/airflow-data-utils',
         command=data_split_command,
         **tasks_args['default_args'],
     )
 
     model_train_args = tasks_args['model_train']
     model_train_command = \
+        'python model_train.py ' \
         f'--input-path \"{model_train_args["input_path"]}\" ' \
         f'--output-path \"{model_train_args["output_path"]}\"'
     model_train = DockerOperator(
@@ -69,20 +72,23 @@ with DAG(DAG_NAME, default_args=default_args, **dag_args) as dag:
 
     model_validate_args = tasks_args['model_validate']
     model_validate_command = \
+        'python model_validate.py ' \
         f'--input-path \"{model_validate_args["input_path"]}\" ' \
         f'--output-path \"{model_validate_args["output_path"]}\" '
     model_validate = DockerOperator(
         task_id='model-validate',
-        image='sergey.polyanskikh/airflow-model-validate',
+        image='sergey.polyanskikh/airflow-model-train',
         command=model_validate_command,
         **tasks_args['default_args'],
     )
 
     data_clean_args = tasks_args['data_clean']
-    data_clean_command = f'--input-paths \"{data_clean_args["input_path"]}\"'
+    data_clean_command = \
+        'python data_clean.py ' \
+        f'--input-paths \"{data_clean_args["input_path"]}\"'
     data_clean = DockerOperator(
         task_id='data-clean',
-        image='sergey.polyanskikh/airflow-data-clean',
+        image='sergey.polyanskikh/airflow-data-utils',
         command=data_clean_command,
         **tasks_args['default_args'],
     )

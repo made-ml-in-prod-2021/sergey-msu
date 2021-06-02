@@ -13,8 +13,8 @@ x-environment: &airflow_environment
   - AIRFLOW__LOGGING__FAB_LOGGING_LEVEL=INFO
   - AIRFLOW__SMTP__SMTP_HOST=smtp.gmail.com
   - AIRFLOW__SMTP__SMTP_PORT=587
-  - AIRFLOW__SMTP__SMTP_USER="${GMAIL_APP_USERNAME}"
-  - AIRFLOW__SMTP__SMTP_PASSWORD="${GMAIL_APP_PASSWORD}"
+  - AIRFLOW__SMTP__SMTP_USER=${GMAIL_APP_USERNAME}
+  - AIRFLOW__SMTP__SMTP_PASSWORD=${GMAIL_APP_PASSWORD}
 
 x-airflow-image: &airflow_image apache/airflow:2.0.0-python3.6
 # ====================================== /AIRFLOW ENVIRONMENT VARIABLES ======================================
@@ -38,7 +38,14 @@ services:
       - postgres
     environment: *airflow_environment
     entrypoint: /bin/bash
-    command: -c 'airflow db init && airflow users create --username admin --password admin --firstname Anonymous --lastname Admin --role Admin --email admin@example.org && airflow connections add fs_default --conn-type fs && airflow variables set PROD_MODEL none'
+    command: >-
+      -c 'airflow db init
+      && airflow users create
+      --username admin --password admin
+      --firstname Anonymous --lastname Admin
+      --role Admin --email admin@example.org
+      && airflow connections add fs_default --conn-type fs
+      && airflow variables set PROD_MODEL none'
 
   webserver:
     build:
@@ -88,40 +95,16 @@ services:
     image: sergey.polyanskikh/airflow-data-download
     restart: "no"
 
-  merge_data:
+  data_utils:
     build:
-      context: images/airflow-data-merge
-    image: sergey.polyanskikh/airflow-data-merge
-    restart: "no"
-
-  clean_data:
-    build:
-      context: images/airflow-data-clean
-    image: sergey.polyanskikh/airflow-data-clean
-    restart: "no"
-
-  data_prepare:
-    build:
-      context: images/airflow-data-prepare
-    image: sergey.polyanskikh/airflow-data-prepare
-    restart: "no"
-
-  data_split:
-    build:
-      context: images/airflow-data-split
-    image: sergey.polyanskikh/airflow-data-split
+      context: images/airflow-data-utils
+    image: sergey.polyanskikh/airflow-data-utils
     restart: "no"
 
   model_train:
     build:
       context: images/airflow-model-train
     image: sergey.polyanskikh/airflow-model-train
-    restart: "no"
-
-  model_validate:
-    build:
-      context: images/airflow-model-validate
-    image: sergey.polyanskikh/airflow-model-validate
     restart: "no"
 
   model_predict:

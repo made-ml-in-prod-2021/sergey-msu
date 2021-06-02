@@ -33,12 +33,13 @@ with DAG(DAG_NAME, default_args=default_args, **dag_args) as dag:
 
     data_prepare_args = tasks_args['data_prepare']
     data_prepare_command = \
+        'python data_prepare.py ' \
         f'--input-path \"{data_prepare_args["input_path"]}\" ' \
         f'--output-path \"{data_prepare_args["output_path"]}\" ' \
         f'--mode \"{data_prepare_args["mode"]}\"'
     data_prepare = DockerOperator(
         task_id='data-prepare',
-        image='sergey.polyanskikh/airflow-data-prepare',
+        image='sergey.polyanskikh/airflow-data-utils',
         command=data_prepare_command,
         **tasks_args['default_args'],
     )
@@ -56,10 +57,12 @@ with DAG(DAG_NAME, default_args=default_args, **dag_args) as dag:
     )
 
     data_clean_args = tasks_args['data_clean']
-    data_clean_command = f'--input-paths \"{data_clean_args["input_path"]}\"'
+    data_clean_command = \
+        'python data_clean.py ' \
+        f'--input-paths \"{data_clean_args["input_path"]}\"'
     data_clean = DockerOperator(
         task_id='data-clean',
-        image='sergey.polyanskikh/airflow-data-clean',
+        image='sergey.polyanskikh/airflow-data-utils',
         command=data_clean_command,
         **tasks_args['default_args'],
     )
