@@ -1,0 +1,43 @@
+default_args:
+  start_date: '2021-05-01'
+  num_task_retries: 3
+  retry_delay: 1
+  dagrun_timeout: 30
+  execution_timeout: 60
+  depends_on_past: True
+  email_on_failure: True
+  owner: 'sergei.polianskikh'
+  email:
+    - 'spmathf@gmail.com'
+dag_args:
+  schedule_interval: "0 0 * * *"
+tasks_args:
+  default_args:
+    network_mode: 'bridge'
+    do_xcom_push: False
+    wait_for_downstream: True
+    volumes:
+      - '/home/sergey/Work/courses/made/semester-2/ml-in-prod/sergey-msu/airflow_ml_dags/data:/data'
+  data_download_hive:
+    name: 'hive_data'
+    output_path: '/data/raw/{{ ds }}/hive'
+    seed: 1
+  data_download_clickhouse:
+    name: 'clickhouse_data'
+    output_path: '/data/raw/{{ ds }}/clickhouse'
+    seed: 2
+  data_download_mongo:
+    name: 'mongo_data'
+    output_path: '/data/raw/{{ ds }}/mongo'
+    seed: 3
+  data_merge:
+    input_paths:
+      - '/data/raw/{{ ds }}/hive'
+      - '/data/raw/{{ ds }}/clickhouse'
+      - '/data/raw/{{ ds }}/mongo'
+    output_path: '/data/raw/{{ ds }}'
+  data_clean:
+    input_paths:
+      - '/data/raw/{{ ds }}/hive'
+      - '/data/raw/{{ ds }}/clickhouse'
+      - '/data/raw/{{ ds }}/mongo'

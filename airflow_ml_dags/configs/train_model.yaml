@@ -1,0 +1,42 @@
+default_args:
+  start_date: '2021-05-01'
+  num_task_retries: 3
+  retry_delay: 1
+  dagrun_timeout: 30
+  execution_timeout: 60
+  depends_on_past: True
+  email_on_failure: True
+  owner: 'sergei.polianskikh'
+  email:
+    - 'spmathf@gmail.com'
+dag_args:
+  schedule_interval: "0 0 * * 1"
+  max_active_runs: 1
+tasks_args:
+  default_args:
+    network_mode: 'bridge'
+    do_xcom_push: False
+    wait_for_downstream: True
+    volumes:
+      - '/home/sergey/Work/courses/made/semester-2/ml-in-prod/sergey-msu/airflow_ml_dags/data:/data'
+  data_sensor:
+    input_path: 'data/raw/{{ ds }}/'
+    features_file: 'data.csv'
+    target_file: 'target.csv'
+  data_prepare:
+    input_path: 'data/raw/{{ ds }}/'
+    output_path: 'data/processed/{{ ds }}/'
+    mode: 'train'
+  data_split:
+    input_path: 'data/processed/{{ ds }}/'
+    output_path: 'data/processed/{{ ds }}/'
+    train_size: 0.8
+    shuffle: True
+  model_train:
+    input_path: 'data/processed/{{ ds }}/'
+    output_path: 'data/models/{{ ds }}/'
+  model_validate:
+    input_path: 'data/processed/{{ ds }}/'
+    output_path: 'data/models/{{ ds }}/'
+  data_clean:
+    input_path: 'data/processed/{{ ds }}/'
